@@ -9,6 +9,28 @@ public class Probability {
 		Permutation(nameList);
 	}
 
+	public static int factorial(int n) {
+		int num = 1;
+		if(n < 0 || 12 < n) {
+			throw new IllegalArgumentException("(int) n は 0≦n≦12 である必要があります。");
+		} else {
+			for(int i = 1; i <= n; i++) {
+				num *= i;
+			}
+			return num;
+		}
+	}
+
+	public static int Permutation(int n, int r) {
+		if(n < 0 || r < 0) {
+			throw new IllegalArgumentException("n, r は共に、正の整数である必要があります。");
+		} else if(n < r) {
+			throw new IllegalArgumentException("r≦n である必要があります。");
+		} else {
+			return factorial(n) / factorial(n - r);
+		}
+	}
+
 	public static void Permutation(String[] str) {
 		int size = str.length;
 		StringBuilder name = new StringBuilder();
@@ -22,10 +44,10 @@ public class Probability {
 		StringBuilder name = new StringBuilder();
 		ArrayList<Integer> n = new ArrayList<>();
 
-		if(0 < r && r <= size) {
-			calc(r, str, name, n);
+		if(size < r || r < 0) {
+			throw new IllegalArgumentException("0≦r≦" + size + " である必要があります。");
 		} else {
-			System.err.println("rの値が適切でありません");
+			calc(r, str, name, n);
 		}
 	}
 
@@ -59,33 +81,11 @@ public class Probability {
 		return b;
 	}
 
-	public static int factorial(int n) {
-		int num = 1;
-
-		if(n < 0) {
-			System.err.println("nが適切ではありません");
-			return 0;
-		} else {
-			for(int i = 1; i <= n; i++) {
-				num *= i;
-			}
-			return num;
-		}
-	}
-
-	public static int Permutation(int n, int r) {
-		if(n < r || n < 0 || r < 0) {
-			System.err.println("nまたはrが適切ではありません");
-			return 0;
-		} else {
-			return factorial(n) / factorial(n - r);
-		}
-	}
-
 	public static int Combination(int n, int r) {
-		if(n < r || n < 0 || r < 0) {
-			System.err.println("nまたはrが適切ではありません");
-			return 0;
+		if(n < 0 || r < 0) {
+			throw new IllegalArgumentException("n, r は共に、正の整数である必要があります。");
+		} else if(n < r) {
+			throw new IllegalArgumentException("r≦n である必要があります。");
 		} else {
 			return Permutation(n, r) / factorial(r);
 		}
