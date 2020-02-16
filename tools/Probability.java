@@ -7,8 +7,24 @@ public class Probability {
 	public static void main(String[] args) {
 		String[] nameList = { "g", "i", "t", "h", "u", "b" };
 		Permutation(nameList);
+		//Probability
+		//new BigDecimal("34").;
 	}
 
+	private Probability() {
+	}
+
+	/**
+	 * {@code n} の階乗の値を返します。
+	 * 
+	 * @param n
+	 *            0≦n≦12 を満たす整数
+	 * 
+	 * @return n! の値
+	 * 
+	 * @exception IllegalAgumentException
+	 *                n が条件を満たさないとき
+	 */
 	public static int factorial(int n) {
 		int num = 1;
 		if(n < 0 || 12 < n) {
@@ -21,6 +37,19 @@ public class Probability {
 		}
 	}
 
+	/**
+	 * {@code n} 個から {@code r} 個選んだときの順列の総数を返します。
+	 * 
+	 * @param n
+	 *            任意の正の整数
+	 * @param r
+	 *            n以下の任意の正の整数
+	 * 
+	 * @return nPr の値
+	 * 
+	 * @exception IllegalAgumentException
+	 *                n,r が条件を満たさないとき
+	 */
 	public static int Permutation(int n, int r) {
 		if(n < 0 || r < 0) {
 			throw new IllegalArgumentException("n, r は共に、正の整数である必要があります。");
@@ -81,6 +110,19 @@ public class Probability {
 		return b;
 	}
 
+	/**
+	 * {@code n} 個から {@code r} 個選んだときの組み合わせの総数を返します。
+	 * 
+	 * @param n
+	 *            任意の正の整数
+	 * @param r
+	 *            n以下の任意の正の整数
+	 * 
+	 * @return nPr の値
+	 * 
+	 * @exception IllegalAgumentException
+	 *                n,r が条件を満たさないとき
+	 */
 	public static int Combination(int n, int r) {
 		if(n < 0 || r < 0) {
 			throw new IllegalArgumentException("n, r は共に、正の整数である必要があります。");
