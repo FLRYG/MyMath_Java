@@ -11,6 +11,9 @@ public class Probability {
 		//new BigDecimal("34").;
 	}
 
+	/**
+	 * インスタンス化不可能
+	 */
 	private Probability() {
 	}
 
