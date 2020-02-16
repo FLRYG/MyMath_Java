@@ -118,7 +118,7 @@ public class Probability {
 	 * @param r
 	 *            n以下の任意の正の整数
 	 * 
-	 * @return nPr の値
+	 * @return nCr の値
 	 * 
 	 * @exception IllegalAgumentException
 	 *                n,r が条件を満たさないとき
