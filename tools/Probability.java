@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 public class Probability {
 
+	/* テスト用 */
 	public static void main(String[] args) {
 		String[] nameList = { "g", "i", "t", "h", "u", "b" };
 		Permutation(nameList);
@@ -25,7 +26,7 @@ public class Probability {
 	 * 
 	 * @return n! の値
 	 * 
-	 * @exception IllegalAgumentException
+	 * @exception IllegalArgumentException
 	 *                n が条件を満たさないとき
 	 */
 	public static int factorial(int n) {
@@ -50,7 +51,7 @@ public class Probability {
 	 * 
 	 * @return nPr の値
 	 * 
-	 * @exception IllegalAgumentException
+	 * @exception IllegalArgumentException
 	 *                n,r が条件を満たさないとき
 	 */
 	public static int Permutation(int n, int r) {

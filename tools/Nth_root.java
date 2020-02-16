@@ -7,6 +7,10 @@ import java.util.regex.Pattern;
 
 public class Nth_root {
 
+	public static void main(String[] args) {
+		System.out.println(Nth_root.sqrt(new BigDecimal("2738"), 10000));
+	}
+
 	public static BigDecimal TWO = new BigDecimal("2");
 
 	/**

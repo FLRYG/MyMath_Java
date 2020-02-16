@@ -2,6 +2,7 @@ package tools;
 
 public class CardinalNumber {
 
+	/* テスト用 */
 	public static void main(String[] args) {
 		long a = System.nanoTime();
 		for(int i = 2; i <= 62; i++) {

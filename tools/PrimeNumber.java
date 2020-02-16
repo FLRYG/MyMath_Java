@@ -4,10 +4,9 @@ import java.util.ArrayList;
 
 public class PrimeNumber {
 
+	/* テスト用 */
 	public static void main(String[] args) {
-
 		long start = System.currentTimeMillis();
-
 		PrimeNumber p = new PrimeNumber();
 		//		p.Search(10000);
 		System.out.println(p.generala(10));
