@@ -1,5 +1,7 @@
 package tools;
 
+import java.math.BigInteger;
+
 public class CardinalNumber {
 
 	/* テスト用 */
@@ -7,9 +9,10 @@ public class CardinalNumber {
 		long a = System.nanoTime();
 		for(int i = 2; i <= 62; i++) {
 			System.out.println(i + ":\t"
-					+ CardinalNumber.baseConversion("3e5d8cc", 16, i));
+					+ CardinalNumber.baseConversion("37482346736527735817536185671628281561911", 10, i));
 		}
 		long b = System.nanoTime();
+
 		System.out.println((b - a) / 1_000_000_000.0);
 	}
 
@@ -23,33 +26,45 @@ public class CardinalNumber {
 			'Y', 'Z'
 	};
 
+	public static String baseConversion(int val, int n1) {
+		return baseConversion(String.valueOf(val), 10, n1);
+	}
+
+	public static String baseConversion(long val, int n1) {
+		return baseConversion(String.valueOf(val), 10, n1);
+	}
+
 	public static String baseConversion(String val, int n0, int n1) {
+		if((n0 < 2 || 62 < n0) || (n1 < 2 || 62 < n1)) {
+			throw new IllegalArgumentException("n0 または n1 が適切ではありません");
+		}
 		StringBuilder sb = new StringBuilder();
+		BigInteger bn0 = new BigInteger(String.valueOf(n0));
+		BigInteger bn1 = new BigInteger(String.valueOf(n1));
 		if(n0 == 10) {
-			int x = Integer.parseInt(val);
-			while(x != 0) {
-				sb.insert(0, cardinalNumberTable[x % n1]);
-				x = x / n1;
+			BigInteger x = new BigInteger(val);
+			while(!(x.equals(BigInteger.ZERO))) {
+				sb.insert(0, cardinalNumberTable[x.mod(bn1).intValue()]);
+				x = x.divide(bn1);
 			}
 			return sb.toString();
 		} else {
-			int n = 0;
+			BigInteger n = new BigInteger("0");
 			int digit = val.length();
 			for(int i = 0; i < digit; i++) {
-				int k = -1;
+				BigInteger k = null;
 				for(int j = 0; j < n0; j++) {
 					if(val.charAt(i) == cardinalNumberTable[j]) {
-						k = j;
+						k = new BigInteger(String.valueOf(j));
 						break;
 					}
 				}
-				if(k == -1) {
-					throw new IllegalArgumentException("");
+				if(k == null) {
+					throw new IllegalArgumentException("val は " + n0 + " 進数表記である必要があります");
 				}
-				n += k * Math.pow(n0, digit - i - 1);
+				n = n.add(k.multiply(bn0.pow(digit - i - 1)));
 			}
-			sb.append(n);
-			return baseConversion(sb.toString(), 10, n1);
+			return baseConversion(n.toString(), 10, n1);
 		}
 	}
 
