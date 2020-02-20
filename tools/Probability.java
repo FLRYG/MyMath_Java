@@ -1,15 +1,18 @@
 package tools;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 
 public class Probability {
 
 	/* テスト用 */
 	public static void main(String[] args) {
-		String[] nameList = { "g", "i", "t", "h", "u", "b" };
-		Permutation(nameList);
-		//Probability
-		//new BigDecimal("34").;
+		String[] nameList = { "j", "a", "v", "a" };
+		permutation(nameList);
+
+		System.out.println(factorial(4));
+		System.out.println(permutation(1000, 324));
+		System.out.println(combination(1000, 324));
 	}
 
 	/**
@@ -22,20 +25,20 @@ public class Probability {
 	 * {@code n} の階乗の値を返します。
 	 * 
 	 * @param n
-	 *            0≦n≦12 を満たす整数
+	 *            0≦n を満たす整数
 	 * 
 	 * @return n! の値
 	 * 
 	 * @exception IllegalArgumentException
 	 *                n が条件を満たさないとき
 	 */
-	public static int factorial(int n) {
-		int num = 1;
-		if(n < 0 || 12 < n) {
-			throw new IllegalArgumentException("(int) n は 0≦n≦12 である必要があります。");
+	public static BigInteger factorial(int n) {
+		BigInteger num = new BigInteger("1");
+		if(n < 0) {
+			throw new IllegalArgumentException("n は 0≦n である必要があります。");
 		} else {
 			for(int i = 1; i <= n; i++) {
-				num *= i;
+				num = num.multiply(new BigInteger(String.valueOf(i)));
 			}
 			return num;
 		}
@@ -54,17 +57,20 @@ public class Probability {
 	 * @exception IllegalArgumentException
 	 *                n,r が条件を満たさないとき
 	 */
-	public static int Permutation(int n, int r) {
+	public static BigInteger permutation(int n, int r) {
 		if(n < 0 || r < 0) {
 			throw new IllegalArgumentException("n, r は共に、正の整数である必要があります。");
 		} else if(n < r) {
 			throw new IllegalArgumentException("r≦n である必要があります。");
-		} else {
-			return factorial(n) / factorial(n - r);
 		}
+		BigInteger x = new BigInteger("1");
+		for(int i = 0; i < r; i++) {
+			x = x.multiply(new BigInteger(String.valueOf(n - i)));
+		}
+		return x;
 	}
 
-	public static void Permutation(String[] str) {
+	public static void permutation(String[] str) {
 		int size = str.length;
 		StringBuilder name = new StringBuilder();
 		ArrayList<Integer> n = new ArrayList<>();
@@ -72,7 +78,7 @@ public class Probability {
 		calc(size, str, name, n);
 	}
 
-	public static void Permutation(String[] str, int r) {
+	public static void permutation(String[] str, int r) {
 		int size = str.length;
 		StringBuilder name = new StringBuilder();
 		ArrayList<Integer> n = new ArrayList<>();
@@ -127,14 +133,17 @@ public class Probability {
 	 * @exception IllegalAgumentException
 	 *                n,r が条件を満たさないとき
 	 */
-	public static int Combination(int n, int r) {
+	public static BigInteger combination(int n, int r) {
 		if(n < 0 || r < 0) {
 			throw new IllegalArgumentException("n, r は共に、正の整数である必要があります。");
 		} else if(n < r) {
 			throw new IllegalArgumentException("r≦n である必要があります。");
-		} else {
-			return Permutation(n, r) / factorial(r);
 		}
+		if(n - r < r)
+			r = n - r;
+		BigInteger x = permutation(n, r).divide(factorial(r));
+
+		return x;
 	}
 
 }
