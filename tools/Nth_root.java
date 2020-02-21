@@ -8,7 +8,8 @@ import java.util.regex.Pattern;
 public class Nth_root {
 
 	public static void main(String[] args) {
-		System.out.println(Nth_root.sqrt(new BigDecimal("2738"), 10000));
+		System.out.println(Nth_root.sqrt(new BigDecimal("2"), 100));
+		System.out.println(Nth_root.nthRoot(new BigDecimal("2"), 3, 100));
 	}
 
 	public static BigDecimal TWO = new BigDecimal("2");
@@ -40,13 +41,13 @@ public class Nth_root {
 		case 0:
 			return BigDecimal.ZERO;
 		case 1:
-			BigDecimal standard;
+			BigDecimal standard;   //基準
 			if(scale >= 1) {
 				standard = new BigDecimal("0." + pow10(scale - 1) + "1");
 			} else {
 				standard = new BigDecimal("1");
 			}
-			BigDecimal xn1 = new BigDecimal("5" + pow10(((digit(x) + 1) / 2) - 1));
+			BigDecimal xn1 = new BigDecimal("5" + pow10(((digit(x) + 1) / 2) - 1));  //初期値
 			BigDecimal xn2;
 			xn2 = (xn1.multiply(xn1).add(x)).divide(xn1.multiply(TWO), scale, RoundingMode.DOWN);
 			//System.out.println(xn2);
@@ -82,6 +83,34 @@ public class Nth_root {
 			return m2.group().length();
 		}
 		return -1;
+	}
+
+	public static BigDecimal nthRoot(BigDecimal x, int n, int scale) {
+		switch (x.signum()) {
+		case -1:
+			throw new ArithmeticException("Attempted square root of negative BigDecimal");
+		case 0:
+			return BigDecimal.ZERO;
+		case 1:
+			BigDecimal standard;   //初期値
+			if(scale >= 1) {
+				standard = new BigDecimal("0." + pow10(scale - 1) + "1");
+			} else {
+				standard = new BigDecimal("1");
+			}
+			BigDecimal bigN = new BigDecimal(String.valueOf(n));
+			BigDecimal xn1 = new BigDecimal("5" + pow10(((digit(x) + 1) / n) - 1));  //初期値
+			BigDecimal xn2;
+			xn2 = xn1.subtract((xn1.pow(n).subtract(x)).divide(xn1.multiply(bigN), scale, RoundingMode.DOWN));
+			System.out.println(xn2);
+			while(xn1.subtract(xn2).abs().subtract(standard).signum() != -1) {
+				xn1 = xn2;
+				xn2 = xn1.subtract((xn1.pow(n).subtract(x)).divide(xn1.multiply(bigN), scale, RoundingMode.DOWN));
+			}
+			return xn2;
+		default:
+			throw new AssertionError("Bad value from signum");
+		}
 	}
 
 }
