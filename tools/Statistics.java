@@ -1,5 +1,7 @@
 package tools;
 
+import java.util.Arrays;
+
 public class Statistics {
 
 	public static void main(String[] args) {
@@ -16,7 +18,37 @@ public class Statistics {
 		System.out.println(Statistics.standardDeviation(dataX));
 		System.out.println(Statistics.covariance(dataX, dataY));
 		System.out.println(Statistics.correlation(dataX, dataY));
+	}
 
+	/**
+	 * 四位分数
+	 */
+	public static double[] quantile(double[] data, int q) {
+		if(q != 1 && q != 2 && q != 3) {
+			throw new IllegalArgumentException();
+		}
+		double[] dataX = data.clone();
+		Arrays.sort(dataX);
+		int length = data.length;
+		double[] Qq = new double[3];
+
+		if(length % 4 == 0) {
+			for(int i = 1; i <= 3; i++) {
+				Qq[i] = (dataX[i * (length / 4)] + dataX[i * (length / 4) + 1]) / 2.0;
+			}
+		} else if(length % 4 == 1) {
+			Qq[1] = dataX[length / 2 + 1];
+			Qq[0] = (dataX[(length / 2) / 2] + dataX[(length / 2) / 2 + 1]) / 2;
+			Qq[2] = (dataX[length / 2 + 1 + (length / 2) / 2] + dataX[length / 2 + 1 + (length / 2) / 2 + 1]) / 2;
+		} else if(length % 4 == 2) {
+			Qq[1] = (dataX[length / 2] + dataX[length / 2 + 1]) / 2;
+			Qq[0] = dataX[(length / 2) / 2 + 1];
+			Qq[2] = dataX[length / 2 + (length / 2) / 2 + 1];
+		} else if(length % 4 == 3) {
+
+		}
+
+		return null;
 	}
 
 	/**
@@ -79,6 +111,19 @@ public class Statistics {
 	 */
 	public static double correlation(double[] dataX, double[] dataY) {
 		return covariance(dataX, dataY) / (standardDeviation(dataX) * standardDeviation(dataY));
+	}
+
+	/**
+	 * 正規化 (平均 → 0 , 標準偏差 → 1)
+	 */
+	public static double[] normalization(double[] data) {
+		double m = mean(data);
+		double s = standardDeviation(data);
+		double[] x = new double[data.length];
+		for(int i = 0; i < data.length; i++) {
+			x[i] = (data[i] - m) / s;
+		}
+		return x;
 	}
 
 }
