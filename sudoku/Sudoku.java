@@ -6,19 +6,20 @@ public class Sudoku {
 	//テスト用
 	public static void main(String[] args) {
 		int[] grid = {
-				0, 0, 7, 0, 0, 0, 0, 0, 8,
-				4, 0, 0, 9, 0, 0, 0, 0, 0,
-				0, 0, 0, 0, 0, 6, 0, 0, 9,
-				0, 6, 0, 2, 0, 0, 0, 1, 0,
-				0, 0, 0, 0, 8, 0, 0, 0, 0,
-				0, 0, 3, 0, 0, 4, 2, 0, 0,
-				0, 9, 0, 0, 0, 0, 0, 0, 6,
-				2, 0, 0, 0, 7, 0, 0, 0, 0,
-				0, 1, 0, 0, 0, 0, 3, 0, 0
+				2, 0, 6, 1, 0, 0, 0, 9, 5,
+				0, 0, 0, 0, 9, 0, 0, 0, 0,
+				0, 7, 0, 2, 3, 0, 0, 0, 0,
+				0, 6, 3, 9, 0, 0, 0, 0, 0,
+				0, 4, 8, 0, 0, 0, 0, 7, 6,
+				0, 0, 0, 6, 0, 0, 0, 4, 8,
+				0, 0, 0, 5, 0, 9, 0, 0, 7,
+				0, 0, 0, 0, 0, 3, 0, 0, 0,
+				0, 5, 4, 7, 0, 0, 1, 2, 0
 		};
 		Sudoku s = new Sudoku(grid);
 		System.out.println(s.solve());
 		System.out.println(s.stringResult());
+		System.out.println(s.getLog());
 
 		//binary表示
 		/* for(int i = 0; i < 9; i++) {
@@ -34,7 +35,9 @@ public class Sudoku {
 	}
 
 	private int[][][] binaryGrid = new int[9][9][9];
+	private int[][] checker = new int[9][9];
 	private int[] solvedGrid = new int[81];
+	private StringBuilder log;
 
 	/**
 	 * 数独
@@ -43,7 +46,7 @@ public class Sudoku {
 		if(grid.length != 81) {
 			throw new IllegalArgumentException("要素数は 81 個である必要があります");
 		}
-		//1で初期化
+		//binaryGrid を1で初期化
 		for(int i = 0; i < 9; i++) {
 			for(int j = 0; j < 9; j++) {
 				for(int k = 0; k < 9; k++) {
@@ -87,9 +90,18 @@ public class Sudoku {
 	}
 
 	/**
+	 * 計算ログを返す
+	 */
+	public String getLog() {
+		return log != null ? log.toString() : "";
+	}
+
+	/**
 	 * 数独を解く。解けた場合は {@code true} , 解けない場合は {@code false} を返す
 	 */
 	public boolean solve() {
+		//計算ログの初期化
+		log = new StringBuilder();
 		//解く
 		boolean b;
 		do {
@@ -100,12 +112,11 @@ public class Sudoku {
 						if(binaryGrid[i][j][k] == 1) {
 							if(sumDepth(i, j, k) == 1 || sumRow(i, j, k) == 1 ||
 									sumColumn(i, j, k) == 1 || sumBrock(i, j, k) == 1) {
-								if(!(sumDepth(i, j, k) == 1 && sumRow(i, j, k) == 1 &&
-										sumColumn(i, j, k) == 1 && sumBrock(i, j, k) == 1)) {
+								if(checker[i][j] == 0) {
 									confirm(i, j, k);
+									log.append("(" + (i + 1) + ", " + (j + 1) + ") = " + (k + 1) + '\n');
 									b = true;
 									break;
-									//System.out.println("a");
 								}
 							}
 						}
@@ -117,21 +128,28 @@ public class Sudoku {
 		boolean result = true;
 		s: for(int i = 0; i < 9; i++) {
 			for(int j = 0; j < 9; j++) {
-				for(int k = 0; k < 9; k++) {
-					if(!(sumDepth(i, j, k) == 1 && sumRow(i, j, k) == 1 &&
-							sumColumn(i, j, k) == 1 && sumBrock(i, j, k) == 1)) {
-						result = false;
-						break s;
-					}
+				if(checker[i][j] == 0) {
+					result = false;
+					break s;
 				}
+				/* for(int k = 0; k < 9; k++) {
+				 * if(!(sumDepth(i, j, k) == 1 && sumRow(i, j, k) == 1 &&
+				 * sumColumn(i, j, k) == 1 && sumBrock(i, j, k) == 1)) {
+				 * result = false;
+				 * break s;
+				 * }
+				 * } */
 			}
 		}
 		//変換してsolvedGridに代入
 		for(int i = 0; i < 9; i++) {
 			for(int j = 0; j < 9; j++) {
-				for(int k = 0; k < 9; k++) {
-					if(binaryGrid[i][j][k] == 1) {
-						solvedGrid[i * 9 + j] = k + 1;
+				if(checker[i][j] == 1) {
+					for(int k = 0; k < 9; k++) {
+						if(binaryGrid[i][j][k] == 1) {
+							solvedGrid[i * 9 + j] = k + 1;
+							break;
+						}
 					}
 				}
 			}
@@ -139,6 +157,7 @@ public class Sudoku {
 		return result;
 	}
 
+	//確定させるx
 	private void confirm(int i, int j, int k) {
 		for(int n = 0; n < 9; n++) {
 			binaryGrid[n][j][k] = 0;
@@ -151,6 +170,7 @@ public class Sudoku {
 			}
 		}
 		binaryGrid[i][j][k] = 1;
+		checker[i][j] = 1;
 	}
 
 	private int sumRow(int i, int j, int k) {
