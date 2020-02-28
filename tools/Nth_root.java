@@ -8,8 +8,8 @@ import java.util.regex.Pattern;
 public class Nth_root {
 
 	public static void main(String[] args) {
-		System.out.println(Nth_root.sqrt(new BigDecimal("2"), 100));
-		System.out.println(Nth_root.nthRoot(new BigDecimal("2"), 3, 100));
+		System.out.println(Nth_root.sqrt(new BigDecimal("125"), 100));
+		System.out.println(Nth_root.nthRoot(new BigDecimal("124"), 3, 2));
 	}
 
 	public static BigDecimal TWO = new BigDecimal("2");
@@ -99,10 +99,11 @@ public class Nth_root {
 				standard = new BigDecimal("1");
 			}
 			BigDecimal bigN = new BigDecimal(String.valueOf(n));
-			BigDecimal xn1 = new BigDecimal("5" + pow10(((digit(x) + 1) / n) - 1));  //初期値
+			BigDecimal xn1 = new BigDecimal("5" + pow10((digit(x) - 1) / n));  //初期値
 			BigDecimal xn2;
-			xn2 = xn1.subtract((xn1.pow(n).subtract(x)).divide(xn1.multiply(bigN), scale, RoundingMode.DOWN));
-			System.out.println(xn2);
+			xn2 = xn1.subtract((xn1.pow(n).subtract(x)).divide(xn1.pow(n - 1).multiply(bigN), scale, RoundingMode.DOWN));
+			/* System.out.println(xn1);
+			 * System.out.println(xn2); */
 			while(xn1.subtract(xn2).abs().subtract(standard).signum() != -1) {
 				xn1 = xn2;
 				xn2 = xn1.subtract((xn1.pow(n).subtract(x)).divide(xn1.multiply(bigN), scale, RoundingMode.DOWN));
